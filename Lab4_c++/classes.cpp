@@ -36,9 +36,20 @@ public:
     double getScore() const {
         return score;
     }
+
+    // Метод, возвращающий оценку по указателю
+    double* getScorePointer() {
+        return &score;
+    }
+
+    // Метод, возвращающий оценку по ссылке
+    double& getScoreReference() {
+        return score;
+    }
 };
 
 class Student {
+    //friend void printStudent123(const Student& student);
 private:
     std::string firstName;
     std::string lastName;
@@ -67,19 +78,7 @@ public:
         return totalScore / grades.size();
     }
 
-    void print() const {
-        std::cout << "Имя: " << firstName << std::endl;
-        std::cout << "Фамилия: " << lastName << std::endl;
-        std::cout << "Дата рождения: " << dateOfBirth << std::endl;
-        std::cout << "Номер студенческого билета: " << studentID << std::endl;
-        std::cout << "Email: " << email << std::endl;
-
-        std::cout << "\nОценки:" << std::endl;
-        for (const Grade& grade : grades) {
-            grade.print();
-            std::cout << std::endl;
-        }
-    }
+   
 
     static Student inputFromConsole() {
         std::string first, last, dob, id, mail;
@@ -114,7 +113,32 @@ public:
     std::string getLastName() const {
         return lastName;
     }
+
+    // Метод, объединяющий имя и фамилию студента
+    std::string getFullName() const {
+        return this->firstName + " " + this->lastName;
+    }
+
+    // Метод, возвращающий оценку по ссылке
+    Grade& getGradeReference() {
+        return grades.front(); // Вернем первую оценку для примера
+    }
+
+    
 };
+
+/*void printStudent123(const Student& student) {
+    std::cout << "Имя и фамилия: " << student.firstName << " " << student.lastName << std::endl;
+    std::cout << "Дата рождения: " << student.dateOfBirth << std::endl;
+    std::cout << "Номер студенческого билета: " << student.studentID << std::endl;
+    std::cout << "Email: " << student.email << std::endl;
+
+    std::cout << "\nОценки:" << std::endl;
+    for (const Grade& grade : student.grades) {
+        grade.print();
+        std::cout << std::endl;
+    }
+};*/
 
 class Project {
 private:
@@ -230,6 +254,28 @@ public:
 
     std::string getEvenName() const {
         return eventName;
+    }
+
+    // Перегрузка оператора '+'
+    Event operator+(const Event& other) const {
+        std::vector<Student> combinedMembers = eventMembers;
+        combinedMembers.insert(combinedMembers.end(), other.eventMembers.begin(), other.eventMembers.end());
+        return Event(eventName + " & " + other.eventName, date, location, combinedMembers);
+    }
+
+    // Перегрузка префиксного оператора '++'
+    Event& operator++() {
+        for (Student& student : eventMembers) {
+            student.getGradeReference().getScoreReference() += 1.0;
+        }
+        return *this;
+    }
+
+    // Перегрузка постфиксного оператора '++'
+    Event operator++(int) {
+        Event temp = *this;
+        ++(*this);
+        return temp;
     }
 };
 
