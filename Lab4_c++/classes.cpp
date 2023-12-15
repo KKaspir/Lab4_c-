@@ -49,7 +49,7 @@ public:
 };
 
 class Student {
-    //friend void printStudent123(const Student& student);
+    friend void printStudent123(const Student& student);
 private:
     std::string firstName;
     std::string lastName;
@@ -127,7 +127,7 @@ public:
     
 };
 
-/*void printStudent123(const Student& student) {
+void printStudent123(const Student& student) {
     std::cout << "Имя и фамилия: " << student.firstName << " " << student.lastName << std::endl;
     std::cout << "Дата рождения: " << student.dateOfBirth << std::endl;
     std::cout << "Номер студенческого билета: " << student.studentID << std::endl;
@@ -138,7 +138,7 @@ public:
         grade.print();
         std::cout << std::endl;
     }
-};*/
+};
 
 class Project {
 private:
